@@ -45,6 +45,7 @@ use Symfony\Component\Console\Output\StreamOutput;
 use Symfony\Component\Console\SignalRegistry\SignalRegistry;
 use Symfony\Component\Console\Terminal;
 use Symfony\Component\Console\Tester\ApplicationTester;
+use Symfony\Component\Console\Tests\Fixtures\AsCommandExtended;
 use Symfony\Component\Console\Tests\Fixtures\MockableAppliationWithTerminalWidth;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\EventDispatcher\EventDispatcher;
@@ -557,6 +558,16 @@ class ApplicationTest extends TestCase
         $display = trim($tester->getDisplay(true));
         $this->assertStringContainsString('Command "foos" is not defined', $display);
         $this->assertStringContainsString('Do you want to run "foo" instead?  (yes/no) [no]:', $display);
+    }
+
+    public function testExtendedAsCommandAtribute()
+    {
+        $application = new Application();
+        $application->add(new WithExtendedAttributeCommand());
+        $application->setAutoExit(false);
+        $tester = new ApplicationTester($application);
+        $exitCode = $tester->run(['command' => 'withExtendedAttribute']);
+        $this->assertSame(Command::FAILURE, $exitCode);
     }
 
     public static function provideInvalidCommandNamesSingle()
@@ -2640,5 +2651,13 @@ class AlarmEventSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents(): array
     {
         return [ConsoleAlarmEvent::class => 'onAlarm'];
+    }
+}
+
+#[AsCommandExtended(name: 'withExtendedAttribute', addedParam: 'addedParam')]
+class WithExtendedAttributeCommand extends Command {
+    protected function execute(InputInterface $input, OutputInterface $output): int
+    {
+        return Command::FAILURE;
     }
 }

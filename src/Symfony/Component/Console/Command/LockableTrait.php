@@ -55,7 +55,7 @@ trait LockableTrait
         if (!$name) {
             if ($this instanceof Command) {
                 $name = $this->getName();
-            } elseif ($attribute = (new \ReflectionClass($this::class))->getAttributes(AsCommand::class)) {
+            } elseif ($attribute = (new \ReflectionClass($this::class))->getAttributes(AsCommand::class, \ReflectionAttribute::IS_INSTANCEOF)) {
                 $name = $attribute[0]->newInstance()->name;
             } else {
                 throw new LogicException(\sprintf('Lock name missing: provide it via "%s()", #[AsCommand] attribute, or by extending Command class.', __METHOD__));

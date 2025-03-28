@@ -12,6 +12,7 @@ CHANGELOG
  * Deprecate methods `Command::getDefaultName()` and `Command::getDefaultDescription()` in favor of the `#[AsCommand]` attribute
  * Add support for Markdown format in `Table`
  * Add support for `LockableTrait` in invokable commands
+ * Add support for extension of `AsCommand` attribute
 
 7.2
 ---

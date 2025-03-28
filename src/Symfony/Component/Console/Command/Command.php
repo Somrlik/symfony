@@ -61,7 +61,7 @@ class Command
     {
         trigger_deprecation('symfony/console', '7.3', 'Method "%s()" is deprecated and will be removed in Symfony 8.0, use the #[AsCommand] attribute instead.', __METHOD__);
 
-        if ($attribute = (new \ReflectionClass(static::class))->getAttributes(AsCommand::class)) {
+        if ($attribute = (new \ReflectionClass(static::class))->getAttributes(AsCommand::class, \ReflectionAttribute::IS_INSTANCEOF)) {
             return $attribute[0]->newInstance()->name;
         }
 
@@ -75,7 +75,7 @@ class Command
     {
         trigger_deprecation('symfony/console', '7.3', 'Method "%s()" is deprecated and will be removed in Symfony 8.0, use the #[AsCommand] attribute instead.', __METHOD__);
 
-        if ($attribute = (new \ReflectionClass(static::class))->getAttributes(AsCommand::class)) {
+        if ($attribute = (new \ReflectionClass(static::class))->getAttributes(AsCommand::class, \ReflectionAttribute::IS_INSTANCEOF)) {
             return $attribute[0]->newInstance()->description;
         }
 
@@ -91,7 +91,7 @@ class Command
     {
         $this->definition = new InputDefinition();
 
-        $attribute = ((new \ReflectionClass(static::class))->getAttributes(AsCommand::class)[0] ?? null)?->newInstance();
+        $attribute = ((new \ReflectionClass(static::class))->getAttributes(AsCommand::class, \ReflectionAttribute::IS_INSTANCEOF)[0] ?? null)?->newInstance();
 
         if (null === $name) {
             if (self::class !== (new \ReflectionMethod($this, 'getDefaultName'))->class) {
